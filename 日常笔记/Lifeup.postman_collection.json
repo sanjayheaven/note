@@ -1,0 +1,622 @@
+{
+	"info": {
+		"_postman_id": "3b991f28-6342-4da0-bb51-58215352ed3b",
+		"name": "Lifeup",
+		"description": "环境配置说明：\n> 本地环境：\n\tv1: 127.0.0.1:3001/lifeup\n\n> 测试环境：\n\tv1: 18.138.114.203:3333/lifeup\n\n> 图片路径：\n\t'https://s3-ap-southeast-1.amazonaws.com/ebuymart/' + cover\n \n请求参数配置：\nheaders 头部 Authorization设置token   \n\n**token 暂定为**\n\n'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w'",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "商品相关",
+			"item": [
+				{
+					"name": "获取商品分类信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODg2NTg0NTUsImV4cCI6MTYyMDIxNjA1NX0.01B2OaR8CYGS3FjHTCqIJ-CVs-pyPyhUo50_sFk_CF0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/goods/categories",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"goods",
+								"categories"
+							]
+						},
+						"description": "返回信息：\n```js\n[\n    {\n        \"_id\": \"5df4ab66afbe6b8906213cae\",\n        \"name_ch\": \"新鲜蔬菜\",\n        \"name_en\": \"Fresh Vegetables\",\n        \"cover\": \"uploads/image-1536236057625547.jpg\",\n        \"subs\": [\n            {\n                \"_id\": \"5df4ab66afbe6b8906213cbf\",\n                \"name_ch\": \"叶菜类\",\n                \"name_en\": \"Leafy Vegetables\",\n                \"cover\": \"uploads/image-1534852669282446.jpg\"\n            },\n            ...\n        ]\n    }\n    ...\n]\n```\n字段说明：\n```js\n{\n\t_id:\"一级分类id\",\n\tname_ch:\"商品中文名\",\n\tcover:\"一级分类封面图\",\n\tsubs:\"二级分类相关信息\"\n\t...\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "获取单个商品详情",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/orders/5eac3aeacb5cbc199c76e12d",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"orders",
+								"5eac3aeacb5cbc199c76e12d"
+							]
+						},
+						"description": "返回示例\r\n```js\r\n{\r\n    \"stock\": {\r\n        \"unit\": \"ctn\",\r\n        \"sale\": 99954,\r\n        \"real\": 99954,\r\n        \"threshold\": 0\r\n    },\r\n    \"images\": [\r\n        \"uploads/AWS-1548240116060.jpeg\",\r\n        \"uploads/AWS-1548240116163.jpeg\"\r\n    ],\r\n    \"_id\": \"5df4ab8067a3709e16a5b90f\",\r\n    \"name_ch\": \"日本王林苹果\",\r\n    \"name_en\": \"Japanese Wang Lin Apple\",\r\n    \"origin_ch\": \"日本\",\r\n    \"origin_en\": \"Japanese\",\r\n    \"desc_ch\": \"日本福岛县用金冠与印度杂交选育而成，1952年命名。排名全球前5的苹果\",\r\n    \"desc_en\": \"Fukushima Prefecture, Japan, was selected from the Golden Crown and India, and was named in 1952. Ranked among the top 5 apples in the world\",\r\n    \"father\": \"5df4ab66afbe6b8906213cb9\",\r\n    \"specifications\": [\r\n        {\r\n            \"_id\": \"5df4ab8067a3709e16a5b910\",\r\n            \"spec_ch\": \"1箱\",\r\n            \"spec_en\": \"1ctn\",\r\n            \"cprice\": 2.49,\r\n            \"oprice\": null,\r\n            \"limit\": 2,\r\n            \"ratio\": 1,\r\n            \"sku\": \"FRU190016\"\r\n        }\r\n    ],\r\n    \"spu\": \"FRU190016\",\r\n    \"cover\": \"uploads/AWS-1548240105974.jpeg\",\r\n    \"createTime\": \"2019-12-14T09:29:30.217Z\",\r\n    \"costPrice\": 2,\r\n    \"attributes\": [],\r\n    \"suppliers\": []\r\n}\r\n```\r\n字段说明\r\n```js\r\n{\r\n    \"stock\": {\r\n        \"unit\": \"库存单位\",\r\n        \"sale\": '售卖库存',\r\n        \"real\": '实际库存',\r\n        \"threshold\": '库存警告阈值'\r\n    },\r\n    \"images\": [详情图片，多张],\r\n    \"_id\": \"5df4ab8067a3709e16a5b90f\",\r\n    \"name_ch\": \"中文名称\",\r\n    \"name_en\": \"英文名称\",\r\n    \"origin_ch\": \"产地\",\r\n    \"origin_en\": \"产地\",\r\n    \"desc_ch\": \"描述\",\r\n    \"desc_en\": \"描述\",\r\n    \"father\": \"所属分类，二级分类\",\r\n    \"specifications\": [\r\n        {\r\n            \"_id\": \"5df4ab8067a3709e16a5b910\",\r\n            \"spec_ch\": \"规格\",\r\n            \"spec_en\": \"规格\",\r\n            \"cprice\": '现价',\r\n            \"oprice\": '原价',\r\n            \"limit\": '限购',\r\n            \"ratio\": '换算比',\r\n            \"sku\": \"sku\"\r\n        }\r\n    ],\r\n    \"spu\": \"spu\",\r\n    \"cover\": \"封面图片\",\r\n    \"createTime\": \"创建时间\",\r\n    \"costPrice\": \"\",\r\n    \"attributes\": [],\r\n}\r\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "获取特定分组商品",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/goods?category=5de73dad2b5429104c3ff1fb&sort=hot&current=1&pageSize=10",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"goods"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "5de73dad2b5429104c3ff1fb",
+									"description": "分类ID，一级分类id或者二级分类id 。。注意：**必填选项**"
+								},
+								{
+									"key": "sort",
+									"value": "hot",
+									"description": "排序参数，默认值：hot  可选项：hot/new/priceUp/priceDown"
+								},
+								{
+									"key": "current",
+									"value": "1",
+									"description": "当前页参数，默认值：1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10",
+									"description": "一页展示数量，默认值：10"
+								}
+							]
+						},
+						"description": "返回信息\n```js\n{\n    \"total\": 106,\n    \"goods\": [\n        {\n            \"_id\": \"5df4ab7b67a3709e16a5b7cd\",\n            \"name_ch\": \"中国紫包菜(称重）\",\n            \"name_en\": \"China Red Cabbage(Weight)\",\n            \"desc_ch\": \"含活力花青素 口感清新脆爽\",\n            \"desc_en\": \"\",\n            \"cover\": \"uploads/image-153268843086423.jpg\",\n            \"ratio\": 1,\n            \"spec_ch\": \"1箱\",\n            \"spec_en\": \"1ctn\",\n            \"cprice\": 2.25,\n            \"oprice\": null,\n            \"limit\": 0,\n            \"sku\": \"VEG190005\",\n            \"ifWeigh\": false,\n            \"remain\": 99906\n        },\n        ...\n    ]\n}\n```\n字段说明:\n```js\n{\n\ttotal:\"查询得到的商品总量\",\n\tgoods:\"查询到的商品数组\",\n\tgoods:{\n\t\t\"_id\": \"商品id\",\n        \"name_ch\": \"中文名称\",\n        \"name_en\": \"英文名称\",\n        \"desc_ch\": \"中文描述\",\n        \"desc_en\": \"英文描述\",\n        \"cover\": \"封面路径\",\n        \"ratio\":  \"换算比\"\n        \"spec_ch\": \"规格中文\",\n        \"spec_en\": \"英文\",\n        \"cprice\": \"现价\",\n        \"oprice\": \"原价\",\n        \"limit\": \"购买限制\",\n        \"sku\": \"SKU\",\n        \"ifWeigh\": \"是否称重\",\n        \"remain\": \"剩余数量\"\n\t}\n\t\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "根据关键字查询",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/goods?keyword=油麦&sort=hot&pageSize=10&current=1",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"goods"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "油麦",
+									"description": "查询关键字参数，注意：必填选项"
+								},
+								{
+									"key": "sort",
+									"value": "hot",
+									"description": "排序参数，默认值：hot  可选项：hot/new/priceUp/priceDown"
+								},
+								{
+									"key": "pageSize",
+									"value": "10",
+									"description": "一页展示数量，默认值：10"
+								},
+								{
+									"key": "current",
+									"value": "1",
+									"description": "当前页参数，默认值：1"
+								}
+							]
+						},
+						"description": "\n返回信息\n```js\n{\n    \"total\": 3,\n    \"goods\": [\n        {\n            \"_id\": \"5df4ab8067a3709e16a5b90f\",\n            \"name_ch\": \"日本王林苹果\",\n            \"name_en\": \"Japanese Wang Lin Apple\",\n            \"desc_ch\": \"日本福岛县用金冠与印度杂交选育而成，1952年命名。排名全球前5的苹果\",\n            \"desc_en\": \"Fukushima Prefecture, Japan, was selected from the Golden Crown and India, and was named in 1952. Ranked among the top 5 apples in the world\",\n            \"cover\": \"uploads/AWS-1548240105974.jpeg\",\n            \"ratio\": 1,\n            \"spec_ch\": \"1箱\",\n            \"spec_en\": \"1ctn\",\n            \"cprice\": 2.49,\n            \"oprice\": null,\n            \"limit\": 2,\n            \"sku\": \"FRU190016\",\n            \"ifWeigh\": false,\n            \"remain\": 99954\n        },\n        ...\n    ]\n}\n```\n\n字段解释\n```js\n{\n    \"total\": '数量',\n    \"goods\": [\n        {\n            \"_id\": \"id\",\n            \"name_ch\": \"name\",\n            \"name_en\": \"name\",\n            \"desc_ch\": \"描述\",\n            \"desc_en\": \"描述\",\n            \"cover\": \"图片\",\n            \"ratio\": '换算比',\n            \"spec_ch\": \"规格\",\n            \"spec_en\": \"规格\",\n            \"cprice\": '现价',\n            \"oprice\": '原价',\n            \"limit\": '限购',\n            \"sku\": \"sku\",\n            \"ifWeigh\": '是否称重',\n            \"remain\": '剩余数量'\n        },\n        ...\n    ]\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "获取多个商品信息",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"payload\":[\n\t\t\t\"5de73dc3e623069c84ada899\",\n\t\t\t\"5de73dc3e623069c84ada88f\"\n\t\t]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{v1}}/goods/list",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"goods",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "订单相关",
+			"item": [
+				{
+					"name": "获取订单列表",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/orders/?customer=5e4b83ef520dc07dc02edcb9&current=1&pageSize=10",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"orders",
+								""
+							],
+							"query": [
+								{
+									"key": "customer",
+									"value": "5e4b83ef520dc07dc02edcb9",
+									"description": "用户ID，必填项，否则返回404"
+								},
+								{
+									"key": "current",
+									"value": "1",
+									"description": "页码参数，默认值：1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10",
+									"description": "页面大小，默认值10"
+								}
+							]
+						},
+						"description": "返回信息示例:\n```js\n{\n    \"total\": 70,\n    \"orders\": [\n        {\n            \"_id\": \"5e70750f3feaec02e088b570\",\n            \"orderTime\": \"2020-03-17T06:58:23.159Z\",\n            \"status\": \"cancelled\",\n            \"receiver\": {\n                \"name\": \"hdx2020\",\n                \"phone\": \"9999\",\n                \"unit\": \"ok这是unit\",\n                \"address\": \"BLK, 445, Yishun Avenue 11\",\n                \"postcode\": \"760445\",\n                \"tag\": \"公司\"\n            },\n            \"ifPaid\": \"paid\",\n            \"deliveryDate\": \"2020-03-18T00:00:00.000Z\",\n            \"goodsList\": [\n                {\n                    \"cover\": \"uploads/AWS-1557215059875.jpeg\"\n                }\n            ],\n            \"items\": 1,\n            \"total\": 300\n        },\n        ...\n}\n```\n\n字段说明：\n```js\n{\n    \"total\": 订单总量 // 分页返回\n    \"orders\": [\n        {\n            \"_id\": \"订单ID\",\n            \"orderTime\": \"下单时间\",\n            \"status\": \"订单状态\",\n            \"receiver\": { // 收货人信息\n                \"name\": \"hdx2020\",\n                \"phone\": \"9999\",\n                \"unit\": \"ok这是unit\",\n                \"address\": \"BLK, 445, Yishun Avenue 11\",\n                \"postcode\": \"760445\",\n                \"tag\": \"公司\"\n            },\n            \"ifPaid\": \"支付状态\", // 默认已支付\n            \"deliveryDate\": \"配送时间\",\n            \"goodsList\": [ // 商品封面图片链接\n                {\n                    \"cover\": \"uploads/AWS-1557215059875.jpeg\"\n                }\n            ],\n            \"items\": 订单内商品数量\n            \"total\": 订单总价\n        },\n        ...\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "单个订单详情",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/orders/5e708996bcfc604d662e6d36",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"orders",
+								"5e708996bcfc604d662e6d36"
+							]
+						},
+						"description": "返回信息：\n```js\n{\n    \"ifPaid\": \"paid\",\n    \"receiver\": {\n        \"name\": \"hdx2020\",\n        \"phone\": \"9999\",\n        \"unit\": \"ok这是unit\",\n        \"address\": \"BLK, 445, Yishun Avenue 11\",\n        \"postcode\": \"760445\",\n        \"tag\": \"公司\"\n    },\n    \"status\": \"waiting\",\n    \"deliveryDate\": \"2020-03-05T00:00:00.000Z\",\n    \"slot\": \"2:00 pm - 7:00 pm\",\n    \"address\": \"ok这是unit, BLK, 445, Yishun Avenue 11\",\n    \"goodsList\": [\n        {\n            \"cover\": \"uploads/AWS-1557215059875.jpeg\",\n            \"ifWeigh\": false,\n            \"name_ch\": \"印尼蜜薯\",\n            \"name_en\": \"Indonesia Sweet Potato\",\n            \"spec_ch\": \"1箱\",\n            \"spec_en\": \"1ctn\",\n            \"cprice\": 3,\n            \"oprice\": null,\n            \"quantity\": 10,\n            \"given\": 0,\n            \"product\": \"5df4ab8b67a3709e16a5bb77\",\n            \"sku\": \"VEG190111\"\n        }\n    ],\n    \"deliveryFee\": 0,\n    \"code\": \"4XSy-ezRb-fn5H-WCi9\",\n    \"orderTime\": \"2020-03-17T05:44:51.392Z\"\n}\n```\n字段说明：\n\n```js\n{\n    \"ifPaid\": 支付状态,\n    \"receiver\": { // 收货人信息\n        \"name\": \"hdx2020\",\n        \"phone\": \"9999\",\n        \"unit\": \"ok这是unit\",\n        \"address\": \"BLK, 445, Yishun Avenue 11\",\n        \"postcode\": \"760445\",\n        \"tag\": \"公司\"\n    },\n    \"status\": 订单状态,\n    \"deliveryDate\": \"配送时间\",\n    \"slot\": \"配送时间段\",\n    \"address\": 送货地址,\n    \"goodsList\": [ // 商品信息\n        {\n            \"cover\": \"uploads/AWS-1557215059875.jpeg\",\n            \"ifWeigh\": false,\n            \"name_ch\": \"印尼蜜薯\",\n            \"name_en\": \"Indonesia Sweet Potato\",\n            \"spec_ch\": \"1箱\",\n            \"spec_en\": \"1ctn\",\n            \"cprice\": 3,\n            \"oprice\": null,\n            \"quantity\": 10,\n            \"given\": 0,\n            \"product\": \"5df4ab8b67a3709e16a5bb77\",\n            \"sku\": \"VEG190111\"\n        }\n    ],\n    \"deliveryFee\": 配送费,\n    \"code\": \"订单号\",\n    \"orderTime\": \"下单时间\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "获取客户配送信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/orders/deliveryInfo?customer=5ea7a3c64a4afb60272ae6b3",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"orders",
+								"deliveryInfo"
+							],
+							"query": [
+								{
+									"key": "customer",
+									"value": "5ea7a3c64a4afb60272ae6b3"
+								}
+							]
+						},
+						"description": "返回信息示例：\n``` js\n{\n    \"datesInfo\": [\n        {\n            \"deliveryDate\": \"2020-03-18\",\n            \"valid\": true,\n            \"haveOrder\": true,\n            \"count\": 1\n        },\n       ...\n    ],\n    \"delivery\": { \n        \"requirement\": 9,\n        \"fee\": 2,\n        \"free\": 19.9\n    },\n    \"deliverySlots\": [\n        \"9:00 am - 12:30 pm\",\n        \"2:00 pm - 7:00 pm\"\n    ],\n    \"addressList\": [\n        {\n            \"tag\": \"家\",\n            \"ifDefault\": true,\n            \"address_ch\": \"2-010, Ave 1, Singapore 00000000\",\n            \"address_en\": \"2-010, Ave 1, Singapore 00000000\",\n            \"district\": \"5e5dd0f71a129803c527bf0c\",\n            \"unit\": \"2-010\",\n            \"receiver\": \"testUser1\",\n            \"phone\": \"11111111\"\n        }\n        ...\n    ]\n}\n```\n字段说明：\n```js\n{\n    \"datesInfo\": [\n        {\n            \"deliveryDate\": \"配送日期\",\n            \"valid\": 有效配送日期 ,\n            \"haveOrder\": 当天是否有订单了,\n            \"count\": 当天订单总量\n        },\n       ...\n    ],\n    \"delivery\": {\n        \"requirement\": 起送价格\n        \"fee\": 邮费,\n        \"free\": 免邮阈值\n    },\n    \"deliverySlots\": 配送时间段,\n    \"addressList\": [\n        {\n            \"tag\": 标签,\n            \"ifDefault\": 是否是默认地址,\n            \"address_ch\": 收货地址,\n            \"address_en\": 收货地址 ,\n            \"district\": \"区域ID\",\n            \"unit\": 单元号,\n            \"receiver\": 收货人,\n            \"phone\": 收货人联系方式\n        }\n        ...\n    ]\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "生成订单",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODg2NTg0NTUsImV4cCI6MTYyMDIxNjA1NX0.01B2OaR8CYGS3FjHTCqIJ-CVs-pyPyhUo50_sFk_CF0",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"remark\":\"留言\",\n    \"goods\":[\n\t\t{\"product\": \"5de73dcae623069c84adaa57\", \"quantity\":12, \"sku\": \"MEA190054\"}\n\t],\n    \"receiver\":{\n                    \"name\":\"hdx2020\",\n                    \"phone\":9999,\n                    \"district\":\"5e66075876d32700144e51af\",\n                    \"unit\": \"ok这是unit\",\n                    \"tag\":\"公司\",\n                    \"deliveryDate\":\"2020-05-12\"\n                },\n    \"customer\":\"5ea7a3c64a4afb60272ae6b3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{v1}}/orders/",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						},
+						"description": "返回信息\n```js\n{\n    \"type\": \"普通\",\n    \"_id\": \"5e6f1e6b2fd5604e417bec62\",\n    \"code\": \"MpHy-hKyo-lG5u-dSmE\",\n    \"orderTime\": \"2020-03-16T06:36:27.419Z\",\n    \"goods\": [\n        {\n            \"_id\": \"5e6f1e6b2fd5604e417bec63\",\n            \"goodInfo\": {\n                \"product\": \"5df4ab8b67a3709e16a5bb77\",\n                \"sku\": \"VEG190111\",\n                \"name_ch\": \"印尼蜜薯\",\n                \"name_en\": \"Indonesia Sweet Potato\",\n                \"spec_ch\": \"1箱\",\n                \"spec_en\": \"1ctn\",\n                \"costPrice\": 2,\n                \"cprice\": 3,\n                \"oprice\": null,\n                \"category\": \"新鲜蔬菜\"\n            },\n            \"quantity\": 10,\n            \"given\": 0,\n            \"ifWeigh\": false\n        }\n    ],\n    \"receiver\": {\n        \"name\": \"hdx2020\",\n        \"phone\": \"9999\",\n        \"unit\": \"ok这是unit\",\n        \"address\": \"BLK, 445, Yishun Avenue 11\",\n        \"postcode\": \"760445\",\n        \"tag\": \"公司\"\n    },\n    \"delivery\": {\n        \"date\": \"2020-03-05T00:00:00.000Z\",\n        \"slot\": \"2:00 pm - 7:00 pm\",\n    },\n    \"status\": \"waiting\",\n    \"customer\": \"5e4b83ef520dc07dc02edcb9\",\n    \"remark\": {\n        \"company\": \"\",\n        \"customer\": \"留言\"\n    },\n    \"__v\": 0\n}\n```\n字段说明:\n```js\n{\n\n    \"type\": \"普通\",\n    \"_id\": \"订单id\",\n    \"code\": \"订单号\",\n    \"orderTime\": \"订单时间\",\n    \"goods\": [\n        {\n            \"_id\": \"商品id\",\n            \"goodInfo\": { // 商品信息\n                \"product\": \"5df4ab8b67a3709e16a5bb77\",\n                \"sku\": \"VEG190111\",\n                \"name_ch\": \"印尼蜜薯\",\n                \"name_en\": \"Indonesia Sweet Potato\",\n                \"spec_ch\": \"1箱\",\n                \"spec_en\": \"1ctn\",\n                \"costPrice\": 2,\n                \"cprice\": 3,\n                \"oprice\": null,\n                \"category\": \"新鲜蔬菜\"\n            },\n            \"quantity\": 10,\n            \"given\": 0,\n            \"ifWeigh\": false\n        }\n    ],\n    \"receiver\": { // 收货相关信息\n        \"name\": \"hdx2020\",\n        \"phone\": \"9999\",\n        \"unit\": \"ok这是unit\",\n        \"address\": \"BLK, 445, Yishun Avenue 11\",\n        \"postcode\": \"760445\",\n        \"tag\": \"公司\"\n    },\n    \"delivery\": {\n        \"date\": \"配送日期\",\n        \"slot\": \"配送时间段\",\n    },\n    \"status\": \"订单状态\",，正在处理，打包，配送\n    \"customer\": \"用户id\",\n    \"remark\": {\n        \"company\": \"\",\n        \"customer\": \"留言\"\n    },\n    \"__v\": 0\n}\n```\n传入body参数说明：\n```js\n{\n    \"remark\":\"留言\",\n    \"goods\":[\n\t\t{\"product\": \"商品ID\", \"quantity\": 购买数量, \"sku\": \"SKU\"}\n\t],\n    \"receiver\":{\n                    \"name\":\"收货人\",\n                    \"phone\":电话号码,\n                    \"district\":\"区域地址 ID\", // \n                    \"unit\": \"家单元号\",\n                    \"tag\":\"标签\", // 家，公司，学校，代收点\n                    \"deliveryDate\":\"2020-03-05\" // 配送日期。注意：格式要求如上\n                },\n    \"customer\":\"用户ID\",\n}\n```\n其中 receiver中的district  \n通过**邮编验证**获取，"
+					},
+					"response": []
+				},
+				{
+					"name": "取消订单",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/orders/5e719593605dba62ebb3b046",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"orders",
+								"5e719593605dba62ebb3b046"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "下单前须知：\n\n\n相关API返回信息见 ‘获取客户配送信息’\n\n**起送价要求**  ：满足起送价要求，  \n\n**配送日期要求**  ：只能在指定日期配送   \n \n**免运费要求**  ：达到一定条件可以免配送费   \n\n\n> 如果日期 valid:False,则无法在那天配送\n\n\n\n订单状态说明：\n```js\n{\n\twaiting:'待处理',\n\tprocessing:'备货中',\n\tpackaged:'已打包',\n\tshipping:'送货中',\n\tdelevered:'已送达',\n\treceived:'已签收',\n\tcancelled:'已取消',\n\tdeleted:'已删除\n}\n```\n\n注：\n1. **生成的订单默认已支付**\n2. 只有waiting状态的订单可以取消\n3. \n",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3bb4a58b-42ed-4212-a75d-e687ebb8f424",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2c4e1c5e-d61e-4208-96bc-0cfeb4ac1dc0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "用户相关",
+			"item": [
+				{
+					"name": "登录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"phone\":11111111,\n\t\"nickname\":\"昵称\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{v1}}/login/",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"login",
+								""
+							]
+						},
+						"description": "\n返回信息：\n```js\n{\n    \"customer\": {\n        \"_id\": \"5e6f414c6762d45a960dd887\",\n        \"phone\": \"84034992\",\n        \"nickname\": \"昵称\"\n    }\n}\n```\n注意：body 参数 phone 和 nickname 是必填项"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "地址相关",
+			"item": [
+				{
+					"name": "根据邮编获取地址",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{v1}}/users/checkDistrict?postcode=760445",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"users",
+								"checkDistrict"
+							],
+							"query": [
+								{
+									"key": "postcode",
+									"value": "760445"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增地址",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"postcode\":\"710457\",\n\t\"building\":\"Blk 422\",\n\t\"phone\":\"12345678\",\n\t\"unit\":\"好\",\n\t\"tag\":\"家\",\n\t\"gender\":\"先生\",\n\t\"receiver\":\"hdx\",\n\t\"ifDefault\":false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{v1}}/users/5ea7a3c64a4afb60272ae6b3/address",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"users",
+								"5ea7a3c64a4afb60272ae6b3",
+								"address"
+							]
+						},
+						"description": "说明：\n\n**创建地址前必须查询邮编判断是否已有区域登记 获取district id**\n\n两种情况：\n\n1. 已存在district \n填入相关信息即可\n\n2. 不存在district \n则需要\n新加一个builid字段  例如\n```js\nbuilding:'地址详情'\n\n```\n结合其他信息，可创建地址\n\n返回信息：我的地址列表\n```js\n[\n    {\n        \"createTime\": \"2020-03-10T05:59:55.128Z\",\n        \"_id\": \"5e672cdbc8a6a36ccfb10222\",\n        \"phone\": \"76044565\",\n        \"unit\": \"hasd'\",\n        \"tag\": \"School\",\n        \"gender\": \"Male\",\n        \"receiver\": \"hell\",\n        \"ifDefault\": true,\n        \"district\": \"5dfca2c71a7feada9fa0c388\"\n    },\n    ...\n]\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "删除地址",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"_id\":\"5ea7c00be4344f1d3cd3670e\",\n\t\"district\":\"5e66075876d32700144e51af\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{v1}}/users/5e4f4e3e00daa6381178bb52/address",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"users",
+								"5e4f4e3e00daa6381178bb52",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "设置默认地址",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lckZyb20iOiJsaWZldXAiLCJpYXQiOjE1ODQ0MjIxNTcsImV4cCI6MTYxNTk3OTc1N30.eOYbtGFNlxwKRmUDN50idfGgDN70kFq7iT9og-pNJ2w",
+								"equals": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{v1}}/users/5ea7a3c64a4afb60272ae6b3/setDefaultAddress?address=5ea7c23ee4344f1d3cd3670f",
+							"protocol": "http",
+							"host": [
+								"{{v1}}"
+							],
+							"path": [
+								"users",
+								"5ea7a3c64a4afb60272ae6b3",
+								"setDefaultAddress"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "5ea7c23ee4344f1d3cd3670f"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "ad518f41-1a86-4163-aa5d-b6015362cf9f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "e4c9cd43-7b78-4c38-87a2-604c204c01f7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
