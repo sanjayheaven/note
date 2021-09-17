@@ -17,4 +17,4 @@ React-Redux is offical Redux UI binding library for React
 - useSelector
   read the value
 - useDispatch
-  dispatch the action
+  return a function that dispatch the action
