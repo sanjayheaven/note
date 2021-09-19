@@ -3,7 +3,6 @@
 well Redux can be introduced by three parts.
 
 ## Store
-## State
 
 ## Action
 

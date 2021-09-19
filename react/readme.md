@@ -143,7 +143,6 @@ Hook Obejct, add UnmountMutation | MountLayout tag
 
 a special case of useReducer
 
-- \_\_SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
 - act as unstable_act,
 - Children,
 - Component,
