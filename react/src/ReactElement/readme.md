@@ -38,6 +38,8 @@ a.d = 1
 
 ## createElement
 
+## cloneAndReplaceKey
+
 ## createFactory
 
 create a kind type of element, using createElement
