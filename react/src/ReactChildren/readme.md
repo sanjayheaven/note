@@ -64,3 +64,5 @@ Flatten a children object (typically specified as `props.children`) and
 return an array with appropriately re-keyed children
 
 ## REACT_PORTAL_TYPE
+
+## onlyChild
