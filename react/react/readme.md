@@ -1,3 +1,5 @@
+# 错误边界
+
 # React
 
 This is a note to read [React(V17.0.4)](https://github.com/facebook/react/tree/main/packages/react) source code.
@@ -5,58 +7,6 @@ This is a note to read [React(V17.0.4)](https://github.com/facebook/react/tree/m
 ## APIs
 
 From [React.js](https://github.com/facebook/react/blob/main/packages/react/src/React.js)
-
-```js
-export {
-  Children,
-  createMutableSource,
-  createRef,
-  Component,
-  PureComponent,
-  createContext,
-  forwardRef,
-  lazy,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useImperativeHandle,
-  useDebugValue,
-  useLayoutEffect,
-  useMemo,
-  useMutableSource,
-  useSyncExternalStore,
-  useReducer,
-  useRef,
-  useState,
-  REACT_FRAGMENT_TYPE as Fragment,
-  REACT_PROFILER_TYPE as Profiler,
-  REACT_STRICT_MODE_TYPE as StrictMode,
-  REACT_DEBUG_TRACING_MODE_TYPE as unstable_DebugTracingMode,
-  REACT_SUSPENSE_TYPE as Suspense,
-  createElement,
-  cloneElement,
-  isValidElement,
-  ReactVersion as version,
-  ReactSharedInternals as __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED,
-  // Deprecated behind disableCreateFactory
-  createFactory,
-  // Concurrent Mode
-  useTransition,
-  startTransition,
-  useDeferredValue,
-  REACT_SUSPENSE_LIST_TYPE as SuspenseList,
-  REACT_LEGACY_HIDDEN_TYPE as unstable_LegacyHidden,
-  REACT_OFFSCREEN_TYPE as unstable_Offscreen,
-  getCacheForType as unstable_getCacheForType,
-  useCacheRefresh as unstable_useCacheRefresh,
-  REACT_CACHE_TYPE as unstable_Cache,
-  // enableScopeAPI
-  REACT_SCOPE_TYPE as unstable_Scope,
-  useOpaqueIdentifier as unstable_useOpaqueIdentifier,
-  act,
-}
-```
 
 ### Chilldren
 

@@ -1,7 +1,0 @@
-# ReactContext
-
-## createContext
-
-## Provider
-
-## Consumer
