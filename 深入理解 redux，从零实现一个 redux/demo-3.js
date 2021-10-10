@@ -1,28 +1,40 @@
-const middlerware =
-  ({ getState, dispath }) =>
-  (next) =>
-    action
-
-// 变形之后
-const middlerware = function ({ getState, dispatch }) {
-  return function (next) {
-    return function (action) {}
-  }
+const A_Middleware = (product, next) => {
+  console.log("A_Middleware")
+  next() // 执行下一个中间件
 }
-
-function logger({ getState }) {
-  return function (next) {
-    return function (action) {
-      console.log("will dispatch", action)
-
-      // 调用 middleware 链中下一个 middleware 的 dispatch。
-      const returnValue = next(action)
-
-      console.log("state after dispatch", getState())
-
-      // 一般会是 action 本身，除非
-      // 后面的 middleware 修改了它。
-      return returnValue
+const B_Middleware = (product, next) => {
+  console.log("B_Middleware")
+  next() // 执行下一个中间件
+}
+const C_Middleware = (product, next) => {
+  console.log("C_Middleware")
+  next() // 执行下一个中间件
+}
+const applyMiddlleware = function (...middlewares) {
+  return function (product, next) {
+    function dispatch(index) {
+      // 这里只是分发过程，不是Redux的dispatch
+      let middleware = middlewares[index]
+      if (index == middlewares.length) {
+        middleware = next
+      }
+      if (!middleware) return
+      // 边界处理，如果最后一个中间件了。那就应用为空.， 或者为外界传入的回调
+      return middleware(product, () => dispatch(index + 1))
     }
+    return dispatch(0)
   }
 }
+
+// 应用
+let initProduct
+
+let res = applyMiddlleware(
+  A_Middleware,
+  B_Middleware,
+  C_Middleware
+)(initProduct)
+// A_Middleware B_Middleware C_Middleware
+
+let dispatch // Redux 的dispatch
+applyMiddlleware(A_Middleware, B_Middleware, C_Middleware)(dispatch)

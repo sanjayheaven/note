@@ -14,7 +14,8 @@
 - 多 State 多 Reducer
 - 原则和规范
 - 中间件机制
--
+- 其他
+- 总结
 
 ## 介绍
 
@@ -182,7 +183,7 @@ const combinedReducers = function (reducersObject) {
 - 异步操作的时候
 - etc
 
-**我们需要中间件**
+### 我们需要中间件
 
 继续完善上图  
 ![Store-UI-Middleware示意图](./images/Store-UI-Middleware示意图.png)
@@ -191,20 +192,97 @@ const combinedReducers = function (reducersObject) {
 在中间件内部去完成某些操作，做一些限制或者修改补充上下文。  
 Redux 中间件也是一样，
 
-在这里推荐可以看下[Koa-compose](https://github.com/koajs/compose/blob/master/index.js)的实现，作为处理异步过程的中间件机制，代码非常精炼。
+在这里推荐可以看下[Koa-compose](https://github.com/koajs/compose/blob/master/index.js)的实现，作为处理（组合）异步过程的中间件机制，代码非常精炼。
 
-**我觉得这些中间件的机制，都像是流水线工作一样，线上的产品在流水线上流动，保证每个工位无论是对这个产品修改删除替换等操作，但都只做一件事，这样才可以提高效率，更好维护。**
+### 自定义中间件
 
-**Redux 中间件机制中的产品 就是 dispatch 的 action**
+这部分，是我根据自我理解的中间件的一些共性。  
+可以跳过，看下一部分。[Redux-Middleware](#Redux-Middleware)
 
-Redux 实现的中间件机制，即 applyMiddleware。
+**我觉得这些中间件的机制，都像是流水线工作一样，一个产品进入流水线，在流水线上流动，保证每个工位无论是对这个产品修改删除替换等操作，最终传出一个最终的产品，而且每个工位只做一件事，这样才可以提高效率，更好维护，**
 
-首先我们先看以下一个中间件，该是什么样子，如何应用？
-
-官方文档已经定义好了 middleware 的形式。
+所以我们先根据 Koa 洋葱模型 做一个中间件伪代码。，
 
 ```js
-const middlerware =
+const someMiddleware = (product, next) => {
+  // dosomething
+  next() // 执行下一个中间件
+  // await next() // 当中间是异步的时候，需要等待
+  // dosomething
+}
+```
+
+- **每一个中间件都有权力操作 product，但是尽量只做属于自己这个中间件的事情**
+- **每个中间件所操作的 product 都是上个中间件传递的 product**
+- **最终经历完所有的 product 也即是出厂的 context**
+
+**Redux 中间件机制中的产品 就是 dispatch**
+因为我们在 action 之前，能且仅能操作**dispatch**
+
+根据这个思路, 我们先自定义一些中间件，以及如何应用中间件
+这里我们直接抽象 产品 等同于 context 等同于 dispatch
+
+[demo-3.js](demo-3.js)
+
+```js
+const A_Middleware = (product, next) => {
+  console.log("A_Middleware")
+  next() // 执行下一个中间件
+}
+const B_Middleware = (product, next) => {
+  console.log("B_Middleware")
+  next() // 执行下一个中间件
+}
+const C_Middleware = (product, next) => {
+  console.log("C_Middleware")
+  next() // 执行下一个中间件
+}
+const applyMiddlleware = function (...middlewares) {
+  return function (product, next) {
+    function dispatch(index) {
+      let middleware = middlewares[index]
+      if (index == middlewares.length) {
+        middleware = next
+      }
+      if (!middleware) return
+      // 边界处理，如果最后一个中间件了。那就应用为空.， 或者为外界传入的回调
+      return middleware(product, () => dispatch(index + 1))
+    }
+    return dispatch(0)
+  }
+}
+
+// 应用
+let initProduct
+
+let res = applyMiddlleware(
+  A_Middleware,
+  B_Middleware,
+  C_Middleware
+)(initProduct)
+// A_Middleware B_Middleware C_Middleware
+```
+
+这一段代码，就是利用 和 Koa-compose 相同原理 实现的中间件机制。  
+applyMiddleware，整个过程就是在**遍历执行中间件，同时传递 product 到下一个**  
+所以当我们以 Redux 的 dispatch 为产品的时候，只需要如同下面这么操作。
+
+```js
+let dispatch // Redux 的dispatch
+applyMiddlleware(A_Middleware, B_Middleware, C_Middleware)(dispatch)
+//
+```
+
+### Redux-Middleware
+
+我们必须要知道中间件的本质，**我们希望产品 dispatch 经过一系列的中间件，经过一个完整的流水线，得到一个新的 dispatch**
+
+在官方文档已经定义好了 middleware 的形式。
+
+[demo-5.js](demo-5.js)
+
+```js
+const middlerware1 =
   ({ getState, dispatch }) =>
   (next) =>
     action
@@ -212,20 +290,110 @@ const middlerware =
 // 上述 变形之后 等同如下
 const middlerware = function ({ getState, dispatch }) {
   return function (next) {
-    return function (action) {}
+    return function (action) {
+      next(action) // 非必须操作
+    }
   }
 }
 ```
 
-怎么理解这个 middleware？
+怎么理解这个 middleware？  
+为什么会定义成这个样子？  
+为什么有三层 function？
 
 [引用官方文档,middlerware 参数定义](http://cn.redux.js.org/api/applymiddleware#%E5%8F%82%E6%95%B0)
 
 > ...middleware (arguments): 遵循 Redux middleware API 的函数。每个 middleware 接受 Store 的 dispatch 和 getState 函数作为命名参数，并返回一个函数。该函数会被传入被称为 next 的下一个 middleware 的 dispatch 方法，并返回一个接收 action 的新函数，这个函数可以直接调用 next(action)，或者在其他需要的时刻调用，甚至根本不去调用它。调用链中最后一个 middleware 会接受真实的 store 的 dispatch 方法作为 next 参数，并借此结束调用链。所以，middleware 的函数签名是 ({ getState, dispatch }) => next => action。
 
-getState，和 dispatch 作为参数
+这段话我看了很多很多遍，说实话，英文表达的更直接，没那么绕口。
 
-## 原则和规范
+getState，和 dispatch 作为参数, next 指的是下一个中间件，
 
-上一部分，介绍了 Redux 关键部分，以及基本思想。  
-如果我们想实现 Redux 的基本功能，首先要理解 Redux 的一些规范和原则。
+我们再来看 Redux 官方 如何应用中间件。  
+**代码只保留必要部分**
+
+[demo-4.js](demo-4.js)
+
+```js
+const compose = function (fns) {
+  return fns.reduce(
+    (acc, item) =>
+      (...args) =>
+        acc(item(...args))
+  )
+}
+
+const applyMiddlleware = function (...middlewares) {
+  return function rewriteStore() {
+    // 官方叫enhancer，实际上是重写了store部分的dispatch
+    const store = createStore()
+    let chain = middlewares.map((middlerware) => middlerware(store))
+    let dispatch = store.dispatch
+    let composeRes = compose(chain)
+    dispatch = composeRes(dispatch) // 重写了dispatch
+    return { ...store, dispatch }
+  }
+}
+```
+
+这里的 compose 的作用是，对一组函数，不断的用上一个函数生成的结果作为下一个函数的参数。  
+比如有着一组函数，[A,B,C,D,E]
+
+看下 reduce 执行过程  
+第一次运行结果: res1 = (...args) => A(B(...args))  
+第二次: acc = res1, item = C, res2 = (...args) => fn1(C(...args)) ,  
+即 res2 = (...args) => f1(f2(f3(...args)))
+
+**compose 最终结果返回的是一个函数**
+
+```js
+funtion (...args){
+  return A(B(C(D(E(...args)))))
+}
+```
+
+而这一段代码是剥离最外层函数，通常情况下，我们需要使用 store 值的时候会使用。
+
+> let chain = middlewares.map((middlerware) => middlerware(store))
+
+### 区别
+
+细心的发现，官方的 compose 实现的，是从右到左，依次执行传入数组。
+而我们自定义的实现的，是顺序数组，这里有个小细节。
+当我们约定，在 中间件 next 之后 do something，结果将会于 Redux 官方 compose 相同
+
+**如果想得到某个具体结果，必须在第一个中间件返回。**
+
+```js
+const A_Middleware = (product, next) => {
+  next() // 执行下一个中间件
+  // do something
+  console.log("A_Middleware")
+}
+```
+
+到此为止，我们在写 Redux 中间件的时候，照抄其形式就是，这都是前提条件。
+
+### 小结
+
+说实话，来来回回看了好几遍 Redux 的中间件，不如 Koa 的中间件 生动和好记。
+可能下次再讨论的时候，又会忘了。或者两个都忘了，但是希望明白中间件的本质
+
+**我们希望产品 product 经过一系列的中间件，经过一个完整的流水线，得到一个新的 product**
+**每个中间件处理的 product 都是上个中间件传递过来的**
+
+## 其他
+
+Redux 还有很多细节，比如 Reducer 会初始化 state 等。  
+Redux 的 API 还有 bindActionCreators,replaceReducers,我没有多说明，甚至我自己学习的时候，也有意忽略，始终认为，当一个东西认作为工具的时候，我们更应该了解这个工具解决了什么问题。
+
+## 总结
+
+Redux 的文档，是真的全。  
+虽然源码内容不多，但是其定义的设计思想，设计规则，真的无时无刻不在影响这。  
+比如 [官方文档-像 Redux 一样思考](http://cn.redux.js.org/understanding/thinking-in-redux/motivation)  
+里面的**动机**和**三大原则**，还有一些术语的规范，都是有前提条件的，不是瞎编乱造的。  
+包括 middlerwareApi 该是什么样子，也都有说明，以及为什么采用 Reduce 来 说明 Reducer 这个概念，  
+**真是一个好文档，哲学啊！**
+
+**文档优先** 这也是一个好习惯，当我们把一个功能，一个思想表达清楚，代码只是实现的工具。
