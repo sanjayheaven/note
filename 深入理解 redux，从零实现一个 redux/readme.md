@@ -385,7 +385,47 @@ const A_Middleware = (product, next) => {
 ## 其他
 
 Redux 还有很多细节，比如 Reducer 会初始化 state 等。  
-Redux 的 API 还有 bindActionCreators,replaceReducers,我没有多说明，甚至我自己学习的时候，也有意忽略，始终认为，当一个东西认作为工具的时候，我们更应该了解这个工具解决了什么问题。
+Redux 的 API 还有 **bindActionCreators**,**replaceReducers**,我没有多说明，甚至我自己学习的时候，也有意忽略，始终认为，当一个东西认作为工具的时候，我们更应该了解这个工具解决了什么问题。
+
+### bindActionCreators
+
+**bindActionCreators** 是将 actionCreators 和 dispatch 再封装一层，通过调用对象的 key 来重定向
+调用相应的 action。
+
+简化后的源码
+
+```js
+function bindActionCreator(actionCreators, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(this, args))
+  }
+}
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === "function") {
+    return bindActionCreator(actionCreators, dispatch)
+  }
+  let boundActionCreators = {}
+  for (const key in actionCreators) {
+    const actionCreator = actionCreators[key]
+    if (typeof actionCreator === "function") {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch)
+    }
+  }
+  return boundActionCreators
+}
+```
+
+**为什么要这么干？？**
+
+- 使接口对外变得更抽象，使用 Redux 的时候，可以不用调用 dispatch
+
+### replaceReducers
+
+**replaceReducers** 将 重新初始化 state，并返回新的 Store
+
+**为什么要这么干？？**
+
+- 可以动态加载不同文件的 Reducers
 
 ## 总结
 
