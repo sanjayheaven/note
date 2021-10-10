@@ -163,12 +163,13 @@ const combinedReducers = function (reducersObject) {
    * 根据action， 接受state，返回newState
    */
   return function combination(state, action) {
+    let newState
     for (let i = 0; i < reducerKeys.length; i++) {
       let key = reducerKeys[i]
       let reducer = reducersObject[key] // 这里就具体到某个模块的reducer了
       let newState = reducer(state, action) // 根据action匹配
-      return newState //
     }
+    return newState //
   }
 }
 ```
@@ -181,7 +182,6 @@ const combinedReducers = function (reducersObject) {
 - 需要记录 action 操作的时候，打印日志和状态
 - 替换修改、操作某个 action
 - 异步操作的时候
-- etc
 
 ### 我们需要中间件
 
@@ -214,13 +214,12 @@ const someMiddleware = (product, next) => {
 
 - **每一个中间件都有权力操作 product，但是尽量只做属于自己这个中间件的事情**
 - **每个中间件所操作的 product 都是上个中间件传递的 product**
-- **最终经历完所有的 product 也即是出厂的 context**
+- **最终经历完所有的 product 也即是出厂的 product**
 
-**Redux 中间件机制中的产品 就是 dispatch**
+**Redux 中间件机制中的产品 就是 dispatch**  
 因为我们在 action 之前，能且仅能操作**dispatch**
 
 根据这个思路, 我们先自定义一些中间件，以及如何应用中间件
-这里我们直接抽象 产品 等同于 context 等同于 dispatch
 
 [demo-3.js](demo-3.js)
 
@@ -279,7 +278,7 @@ applyMiddlleware(A_Middleware, B_Middleware, C_Middleware)(dispatch)
 
 在官方文档已经定义好了 middleware 的形式。
 
-[demo-5.js](demo-5.js)
+[demo-4.js](demo-4.js)
 
 ```js
 const middlerware1 =
@@ -312,7 +311,7 @@ getState，和 dispatch 作为参数, next 指的是下一个中间件，
 我们再来看 Redux 官方 如何应用中间件。  
 **代码只保留必要部分**
 
-[demo-4.js](demo-4.js)
+[demo-5.js](demo-5.js)
 
 ```js
 const compose = function (fns) {
@@ -352,14 +351,14 @@ funtion (...args){
 }
 ```
 
-而这一段代码是剥离最外层函数，通常情况下，我们需要使用 store 值的时候会使用。
+而下面这一段代码是剥离最外层函数，通常情况下，我们需要使用 store 值的时候会使用。
 
 > let chain = middlewares.map((middlerware) => middlerware(store))
 
 ### 区别
 
-细心的发现，官方的 compose 实现的，是从右到左，依次执行传入数组。
-而我们自定义的实现的，是顺序数组，这里有个小细节。
+细心的发现，官方的 compose 实现的，是从右到左，依次执行传入数组。  
+而我们自定义的实现的，是顺序数组，这里有个小细节。  
 当我们约定，在 中间件 next 之后 do something，结果将会于 Redux 官方 compose 相同
 
 **如果想得到某个具体结果，必须在第一个中间件返回。**
@@ -372,15 +371,15 @@ const A_Middleware = (product, next) => {
 }
 ```
 
-到此为止，我们在写 Redux 中间件的时候，照抄其形式就是，这都是前提条件。
+到此为止，我们在写 Redux 中间件的时候，直接照抄其形式就好，这都是前提条件。
 
 ### 小结
 
-说实话，来来回回看了好几遍 Redux 的中间件，不如 Koa 的中间件 生动和好记。
+说实话，来来回回看了好几遍 Redux 的中间件，不如 Koa 的中间件 生动和好记。  
 可能下次再讨论的时候，又会忘了。或者两个都忘了，但是希望明白中间件的本质
 
-**我们希望产品 product 经过一系列的中间件，经过一个完整的流水线，得到一个新的 product**
-**每个中间件处理的 product 都是上个中间件传递过来的**
+- **我们希望产品 product 经过一系列的中间件，经过一个完整的流水线，得到一个新的 product**
+- **每个中间件处理的 product 都是上个中间件传递过来的**
 
 ## 其他
 
@@ -430,7 +429,7 @@ function bindActionCreators(actionCreators, dispatch) {
 ## 总结
 
 Redux 的文档，是真的全。  
-虽然源码内容不多，但是其定义的设计思想，设计规则，真的无时无刻不在影响这。  
+虽然源码内容不多，但是其定义的设计思想，设计规则，真的无时无刻不在影响。  
 比如 [官方文档-像 Redux 一样思考](http://cn.redux.js.org/understanding/thinking-in-redux/motivation)  
 里面的**动机**和**三大原则**，还有一些术语的规范，都是有前提条件的，不是瞎编乱造的。  
 包括 middlerwareApi 该是什么样子，也都有说明，以及为什么采用 Reduce 来 说明 Reducer 这个概念，  
